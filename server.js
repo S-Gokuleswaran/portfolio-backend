@@ -34,6 +34,7 @@ app.post("/contact", async (req, res) => {
                 rejectUnauthorized: false
             }
         });
+        await transporter.verify();
         await transporter.sendMail({
             from: process.env.EMAIL,
             to: process.env.EMAIL,
@@ -96,5 +97,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
-await transporter.verify();
+
 console.log("SMTP connection successful");
