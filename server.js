@@ -77,11 +77,11 @@ app.post("/contact", async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
-
+        console.error("MAIL ERROR:", error);
+    
         res.status(500).json({
             success: false,
-            message: "Failed to send message."
+            message: error.message
         });
     }
 });
