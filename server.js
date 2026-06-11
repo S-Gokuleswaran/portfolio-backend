@@ -5,8 +5,17 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "https://s-gokuleswaran.github.io"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 app.use(express.json());
+app.get("/", (req, res) => {
+    res.send("Backend is running successfully!");
+});
 
 app.post("/contact", async (req, res) => {
     try {
@@ -77,6 +86,8 @@ app.post("/contact", async (req, res) => {
     }
 });
 
-app.listen(5000, () => {
-    console.log("🚀 Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });
