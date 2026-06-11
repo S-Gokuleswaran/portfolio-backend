@@ -16,19 +16,24 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Backend is running successfully!");
 });
-
+console.log("EMAIL exists:", !!process.env.EMAIL);
+console.log("APP_PASSWORD exists:", !!process.env.APP_PASSWORD);
 app.post("/contact", async (req, res) => {
     try {
         const { name, email, message } = req.body;
 
         const transporter = nodemailer.createTransport({
-            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.APP_PASSWORD
+            },
+            tls: {
+                rejectUnauthorized: false
             }
         });
-
         await transporter.sendMail({
             from: process.env.EMAIL,
             to: process.env.EMAIL,
@@ -91,3 +96,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
+await transporter.verify();
+console.log("SMTP connection successful");
