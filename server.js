@@ -27,12 +27,55 @@ app.post("/contact", async (req, res) => {
       to: "eswarangokul45@gmail.com",
       subject: `📩 Portfolio Inquiry from ${name}`,
       html: `
-        <h2>New Portfolio Contact Request</h2>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Message:</b></p>
-        <p>${message}</p>
-      `
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;border:1px solid #e5e5e5;border-radius:10px;overflow:hidden">
+
+  <div style="background:#0f172a;color:white;padding:20px">
+    <h2 style="margin:0">New Portfolio Contact Request</h2>
+  </div>
+
+  <div style="padding:20px">
+
+    <table style="width:100%;border-collapse:collapse">
+
+      <tr>
+        <td style="padding:10px;font-weight:bold;width:120px">
+          Name
+        </td>
+        <td style="padding:10px">
+          ${name}
+        </td>
+      </tr>
+
+      <tr style="background:#f8fafc">
+        <td style="padding:10px;font-weight:bold">
+          Email
+        </td>
+        <td style="padding:10px">
+          ${email}
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding:10px;font-weight:bold">
+          Message
+        </td>
+        <td style="padding:10px">
+          ${message}
+        </td>
+      </tr>
+
+    </table>
+
+    <hr style="margin:20px 0">
+
+    <p style="font-size:14px;color:#666">
+      Sent from Gokuleswaran's Portfolio Website
+    </p>
+
+  </div>
+
+</div>
+`
     });
 
     console.log("Email sent:", data);
