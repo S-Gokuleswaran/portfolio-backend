@@ -12,16 +12,6 @@ app.use(cors({
 
 app.use(express.json());
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.APP_PASSWORD
-  }
-});
-
 app.get("/", (req, res) => {
   res.send("Backend is running successfully!");
 });
@@ -37,7 +27,19 @@ app.post("/contact", async (req, res) => {
       });
     }
 
-    await transporter.sendMail({
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.APP_PASSWORD
+      }
+    });
+
+    console.log("Attempting to send mail...");
+
+    const info = await transporter.sendMail({
       from: process.env.EMAIL,
       to: process.env.EMAIL,
       subject: `📩 New Portfolio Inquiry from ${name}`,
@@ -46,22 +48,27 @@ app.post("/contact", async (req, res) => {
           <div style="background:#0f172a; color:white; padding:20px;">
             <h2 style="margin:0;">New Portfolio Contact Request</h2>
           </div>
+
           <div style="padding:20px;">
             <table style="width:100%; border-collapse: collapse;">
               <tr>
                 <td style="padding:10px; font-weight:bold; width:120px;">Name</td>
                 <td style="padding:10px;">${name}</td>
               </tr>
+
               <tr style="background:#f8fafc;">
                 <td style="padding:10px; font-weight:bold;">Email</td>
                 <td style="padding:10px;">${email}</td>
               </tr>
+
               <tr>
                 <td style="padding:10px; font-weight:bold;">Message</td>
                 <td style="padding:10px;">${message}</td>
               </tr>
             </table>
+
             <hr style="margin:20px 0;">
+
             <p style="color:#666; font-size:14px;">
               This message was submitted through your portfolio website contact form.
             </p>
@@ -70,6 +77,8 @@ app.post("/contact", async (req, res) => {
       `
     });
 
+    console.log("Mail sent:", info.messageId);
+
     res.status(200).json({
       success: true,
       message: "Message sent successfully!"
@@ -77,6 +86,7 @@ app.post("/contact", async (req, res) => {
 
   } catch (error) {
     console.error("MAIL ERROR:", error);
+
     res.status(500).json({
       success: false,
       message: error.message
@@ -84,14 +94,8 @@ app.post("/contact", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
-app.listen(PORT, async () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  try {
-    await transporter.verify();
-    console.log("SMTP connection successful");
-  } catch (err) {
-    console.error("SMTP verification failed:", err);
-  }
 });
