@@ -24,8 +24,8 @@ app.post("/contact", async (req, res) => {
 
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.APP_PASSWORD
@@ -34,7 +34,6 @@ app.post("/contact", async (req, res) => {
                 rejectUnauthorized: false
             }
         });
-        await transporter.verify();
         await transporter.sendMail({
             from: process.env.EMAIL,
             to: process.env.EMAIL,
